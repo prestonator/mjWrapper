@@ -14,15 +14,15 @@ midjourney_bot = MidjourneyBot()
 app = Flask(__name__)
 
 
-
 @app.route("/prompt", methods=["POST"])
 def receive_prompt():
     data = request.get_json()
     prompt = data.get("prompt", None)
-
+    time.sleep(5)
     if prompt:
+        time.sleep(5)
         midjourney_bot.ask(prompt)
-
+        time.sleep(5)
 
         headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
         additional_data = {
@@ -31,7 +31,6 @@ def receive_prompt():
             "field": "image",
         }
         external_url = STRAPI_API_UPLOAD_URL
-        print(external_url)
 
         # Wait for the original image to be generated
         while True:
