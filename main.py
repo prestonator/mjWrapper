@@ -18,15 +18,16 @@ app = Flask(__name__)
 def receive_prompt():
     data = request.get_json()
     prompt = data.get("prompt", None)
-    time.sleep(5)
+    refId = data.get("refId", None)
+    time.sleep(2)
     if prompt:
-        time.sleep(5)
+        time.sleep(2)
         midjourney_bot.ask(prompt)
-        time.sleep(5)
+        time.sleep(2)
 
         headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
         additional_data = {
-            "refId": "11",  # Replace this with the actual refId
+            "refId": f"{refId}",  # Replace this with the actual refId
             "ref": "api::article.article",
             "field": "image",
         }
