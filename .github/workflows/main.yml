@@ -28,4 +28,8 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/new-bot:latest
           build-args: |
             STRAPI_API_TOKEN=${{ secrets.STRAPI_API_TOKEN }}
-            STRAPI_API_UPLOAD_URL=${{ secrets.STRAPI_API_UPLOAD_URL }}    
+            STRAPI_API_UPLOAD_URL=${{ secrets.STRAPI_API_UPLOAD_URL }}
+            USER_TOKEN=${{ secrets.USER_TOKEN }}
+            SERVER_ID=${{ secrets.SERVER_ID }}
+            CHANNEL_ID=${{ secrets.CHANNEL_ID }}
+            PROXY=${{ secrets.PROXY }}

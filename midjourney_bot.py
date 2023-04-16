@@ -1,13 +1,17 @@
 import json
 import requests
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 
 class MidjourneyBot:
-    def __init__(self, config_file="config.json"):
-        self._config = self._parse_json(config_file)
-        self._user_token = self._config.get("user_token", None)
-        self._server_id = self._config.get("server_id", None)
-        self._channel_id = self._config.get("channel_id", None)
-        self._proxy = self._config.get("proxy", None)
+    def __init__(self):
+        self._user_token = os.getenv("USER_TOKEN")
+        self._server_id = os.getenv("SERVER_ID")
+        self._channel_id = os.getenv("CHANNEL_ID")
+        self._proxy = os.getenv("PROXY")
         self._proxies = None
         if self._proxy:
             self._proxies = {
@@ -16,10 +20,6 @@ class MidjourneyBot:
             }
 
         self._header = {"authorization": self._user_token}
-
-    def _parse_json(self, config):
-        with open(config, encoding="utf-8") as fp:
-            return json.load(fp)
 
     def content(self, message):
         return message["content"]
