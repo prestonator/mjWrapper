@@ -11,7 +11,7 @@ class MidjourneyBot:
         self._user_token = os.getenv("USER_TOKEN")
         self._server_id = os.getenv("SERVER_ID")
         self._channel_id = os.getenv("CHANNEL_ID")
-        self._proxy = os.getenv("PROXY")
+        self._proxy = None
         self._proxies = None
         if self._proxy:
             self._proxies = {
