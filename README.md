@@ -2,7 +2,7 @@
 
 A REST API to access midjourney discord
 
-## Configuratio
+## Configuration
 
 update config.json before use this wrapper
 

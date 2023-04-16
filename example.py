@@ -1,17 +1,74 @@
+import os
+from dotenv import load_dotenv
 import time
-
+from flask import Flask, request, jsonify
 from midjourney_bot import MidjourneyBot
 
+
+load_dotenv(dotenv_path=".env")
+STRAPI_API_TOKEN = os.environ.get("STRAPI_API_TOKEN")
+STRAPI_API_UPLOAD_URL = os.environ.get("STRAPI_API_UPLOAD_URL")
+
 midjourney_bot = MidjourneyBot()
-midjourney_bot.ask('a cute fat cat')
 
-while True:
-    message = midjourney_bot.messages(1)[0]
-    if midjourney_bot.validate_image_url(message):
-        break
-    print(midjourney_bot.content(message))
-    time.sleep(5)
+app = Flask(__name__)
 
-message = midjourney_bot.messages(1)[0]
-image_url = midjourney_bot.get_image_url(message)
-midjourney_bot.save_image(image_url, 'test.png')
+
+
+@app.route("/prompt", methods=["POST"])
+def receive_prompt():
+    data = request.get_json()
+    prompt = data.get("prompt", None)
+
+    if prompt:
+        midjourney_bot.ask(prompt)
+
+
+        headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
+        additional_data = {
+            "refId": "11",  # Replace this with the actual refId
+            "ref": "api::article.article",
+            "field": "image",
+        }
+        external_url = STRAPI_API_UPLOAD_URL
+        print(external_url)
+
+        # Wait for the original image to be generated
+        while True:
+            message = midjourney_bot.messages(1)[0]
+            if midjourney_bot.validate_image_url(message):
+                break
+            print(midjourney_bot.content(message))
+            time.sleep(5)
+
+        # Trigger the up_scale command
+        original_message = midjourney_bot.messages(1)[0]
+        up_scale_status = midjourney_bot.up_scale(1, original_message)
+        print("Up_scale status:", up_scale_status)
+
+        # Wait for the upscaled image to be generated
+        while True:
+            upscaled_message = midjourney_bot.messages(1)[0]
+            if (
+                midjourney_bot.validate_image_url(upscaled_message)
+                and upscaled_message["id"] != original_message["id"]
+            ):
+                break
+            print(midjourney_bot.content(upscaled_message))
+            time.sleep(5)
+
+        upscaled_message = midjourney_bot.messages(1)[0]
+        image_url = midjourney_bot.get_image_url(upscaled_message)
+        midjourney_bot.save_image(
+            image_url, "test.png", external_url, headers, additional_data
+        )
+
+        return jsonify(
+            {"status": "success", "message": "Prompt received and processed."}
+        )
+    else:
+        return jsonify({"status": "error", "message": "Invalid prompt."})
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
