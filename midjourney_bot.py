@@ -1,11 +1,5 @@
-import os
-from dotenv import load_dotenv
-
 import json
 import requests
-
-load_dotenv(dotenv_path=".env")
-
 
 class MidjourneyBot:
     def __init__(self, config_file="config.json"):
