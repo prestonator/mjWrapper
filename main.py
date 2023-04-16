@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import time
 from flask import Flask, request, jsonify
 from midjourney_bot import MidjourneyBot
-
+from waitress import serve
 
 load_dotenv(dotenv_path=".env")
 STRAPI_API_TOKEN = os.environ.get("STRAPI_API_TOKEN")
@@ -71,4 +71,4 @@ def receive_prompt():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    serve(app, host="0.0.0.0", port=5000)

@@ -31,4 +31,4 @@ ENV PROXY=$PROXY
 
 EXPOSE 5000
 
-CMD python example.py
+CMD python main.py
