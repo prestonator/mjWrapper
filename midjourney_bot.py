@@ -31,7 +31,11 @@ class MidjourneyBot:
         return self.get_image_url(message).split("_")[-1].split(".")[0]
 
     def get_image_url(self, message):
-        return message["attachments"][0]["url"]
+        if message["attachments"]:
+            return message["attachments"][0]["url"]
+        else:
+            # Handle the situation when there are no attachments
+            return None
 
     def validate_image_url(self, message):
         if message["attachments"]:
