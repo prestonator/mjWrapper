@@ -25,7 +25,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/discord-bot:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/new-bot:latest
           build-args: |
             STRAPI_API_TOKEN=${{ secrets.STRAPI_API_TOKEN }}
             STRAPI_API_UPLOAD_URL=${{ secrets.STRAPI_API_UPLOAD_URL }}    
