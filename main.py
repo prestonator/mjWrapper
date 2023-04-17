@@ -8,6 +8,8 @@ from waitress import serve
 load_dotenv(dotenv_path=".env")
 STRAPI_API_TOKEN = os.environ.get("STRAPI_API_TOKEN")
 STRAPI_API_UPLOAD_URL = os.environ.get("STRAPI_API_UPLOAD_URL")
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
+
 
 midjourney_bot = MidjourneyBot()
 
@@ -25,13 +27,14 @@ def receive_prompt():
         midjourney_bot.ask(prompt)
         time.sleep(2)
 
-        headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
+        old_headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
+        headers = {}
         additional_data = {
             "refId": f"{refId}",  # Replace this with the actual refId
             "ref": "api::article.article",
             "field": "image",
         }
-        external_url = STRAPI_API_UPLOAD_URL
+        external_url = WEBHOOK_URL
 
         # Wait for the original image to be generated
         while True:
@@ -59,9 +62,8 @@ def receive_prompt():
 
         upscaled_message = midjourney_bot.messages(1)[0]
         image_url = midjourney_bot.get_image_url(upscaled_message)
-        midjourney_bot.save_image(
-            image_url, "test.png", external_url, headers, additional_data
-        )
+
+        midjourney_bot.save_image(image_url, "test.png", external_url, headers, additional_data)
 
         return jsonify(
             {"status": "success", "message": "Prompt received and processed."}

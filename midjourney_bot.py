@@ -1,3 +1,4 @@
+import base64
 import json
 import requests
 from dotenv import load_dotenv
@@ -165,22 +166,25 @@ class MidjourneyBot:
         headers=None,
         additional_data=None,
     ):
+        """
         response = requests.get(
             url=image_url,
             headers=self._header,
             proxies=self._proxies,
             timeout=30,
         )
-
+        
         if image_filename:
             with open(image_filename, "wb") as fp:
                 fp.write(response.content)
-
+        """
         if external_url:
-            files = {"files": (image_filename or "image.png", response.content)}
+            # files = [("image", (image_filename or "image.png", response.content, "image/png"))]
+            payload = {
+                "image_url": image_url,
+            }
 
-            if additional_data:
-                for key, value in additional_data.items():
-                    files[key] = (None, value)
+        if additional_data:
+            payload.update(additional_data)
 
-            requests.post(external_url, files=files, headers=headers)
+            requests.post(external_url, headers=headers, data=payload)
