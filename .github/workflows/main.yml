@@ -32,3 +32,4 @@ jobs:
             USER_TOKEN=${{ secrets.USER_TOKEN }}
             SERVER_ID=${{ secrets.SERVER_ID }}
             CHANNEL_ID=${{ secrets.CHANNEL_ID }}
+            WEBHOOK_URL=${{ secrets.WEBHOOK_URL }}
