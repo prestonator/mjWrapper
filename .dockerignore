@@ -1,0 +1,5 @@
+.template.env
+LICENSE
+README.md
+.gitignore
+__pycache__

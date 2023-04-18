@@ -1,6 +1,8 @@
+from urllib3.util.retry import Retry
 import json
 import time
 import requests
+from requests.adapters import HTTPAdapter
 from dotenv import load_dotenv
 import os
 
@@ -21,6 +23,17 @@ class MidjourneyBot:
             }
 
         self._header = {"authorization": self._user_token}
+        self._session = requests.Session()
+
+        retries = Retry(
+            total=5,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "OPTIONS", "POST"]
+        )
+        adapter = HTTPAdapter(max_retries=retries)
+        self._session.mount("https://", adapter)
+        self._session.mount("http://", adapter)
 
     def content(self, message):
         return message["content"]
@@ -38,11 +51,11 @@ class MidjourneyBot:
     def validate_image_url(self, message):
         if message["attachments"]:
             image_url = self.get_image_url(message)
-            response = requests.get(
+            response = self._session.get(
                 url=image_url,
                 headers=self._header,
                 proxies=self._proxies,
-                timeout=30,
+                timeout=120,
             )
             return response.status_code == 200
         return False
@@ -85,12 +98,12 @@ class MidjourneyBot:
         }
 
         url = "https://discord.com/api/v9/interactions"
-        response = requests.post(
+        response = self._session.post(
             url=url,
             json=payload,
             headers=self._header,
             proxies=self._proxies,
-            timeout=30,
+            timeout=120,
         )
         return response.status_code
 
@@ -112,12 +125,12 @@ class MidjourneyBot:
             },
         }
         url = "https://discord.com/api/v9/interactions"
-        response = requests.post(
+        response = self._session.post(
             url=url,
             json=payload,
             headers=self._header,
             proxies=self._proxies,
-            timeout=30,
+            timeout=120,
         )
         if response.status_code != 200:
             print("Error in up_scale:", response.status_code, response.text)
@@ -140,22 +153,22 @@ class MidjourneyBot:
             },
         }
         url = "https://discord.com/api/v9/interactions"
-        response = requests.post(
+        response = self._session.post(
             url=url,
             json=payload,
             headers=self._header,
             proxies=self._proxies,
-            timeout=30,
+            timeout=120,
         )
         return response.status_code
 
     def messages(self, limit=1):
         url = f"https://discord.com/api/v9/channels/{self._channel_id}/messages?limit={limit}"
-        response = requests.get(
+        response = self._session.get(
             url=url,
             headers=self._header,
             proxies=self._proxies,
-            timeout=30,
+            timeout=120,
         )
         return json.loads(response.text)
 
@@ -187,4 +200,4 @@ class MidjourneyBot:
             if additional_data:
                 payload.update(additional_data)
 
-            requests.post(external_url, headers=headers, data=payload)
+            self._session.post(external_url, headers=headers, data=payload)
