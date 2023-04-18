@@ -8,6 +8,11 @@ import os
 
 load_dotenv()
 
+API_BASE_URL = "https://discord.com/api/v9"
+API_VERSION = "1077969938624553050"
+APP_ID = "936929561302675456"
+SESSION_ID = "45bc04dd4da37141a5f73dfbfaf5bdcf"
+
 
 class MidjourneyBot:
     def __init__(self):
@@ -34,6 +39,9 @@ class MidjourneyBot:
         adapter = HTTPAdapter(max_retries=retries)
         self._session.mount("https://", adapter)
         self._session.mount("http://", adapter)
+
+    def wait(self, seconds=2):
+        time.sleep(seconds)
 
     def content(self, message):
         return message["content"]
@@ -63,20 +71,20 @@ class MidjourneyBot:
     def ask(self, prompt):
         payload = {
             "type": 2,
-            "application_id": "936929561302675456",
+            "application_id": APP_ID,
             "guild_id": self._server_id,
             "channel_id": self._channel_id,
             "session_id": "2fb980f65e5c9a77c96ca01f2c242cf6",
             "data": {
-                "version": "1077969938624553050",
+                "version": API_VERSION,
                 "id": "938956540159881230",
                 "name": "imagine",
                 "type": 1,
                 "options": [{"type": 3, "name": "prompt", "value": prompt}],
                 "application_command": {
                     "id": "938956540159881230",
-                    "application_id": "936929561302675456",
-                    "version": "1077969938624553050",
+                    "application_id": APP_ID,
+                    "version": API_VERSION,
                     "default_permission": True,
                     "default_member_permissions": None,
                     "type": 1,
@@ -97,7 +105,7 @@ class MidjourneyBot:
             },
         }
 
-        url = "https://discord.com/api/v9/interactions"
+        url = f"{API_BASE_URL}/interactions"
         response = self._session.post(
             url=url,
             json=payload,
@@ -115,16 +123,14 @@ class MidjourneyBot:
             "channel_id": self._channel_id,
             "message_flags": 0,
             "message_id": self.message_id(message),
-            "application_id": "936929561302675456",
-            "session_id": "45bc04dd4da37141a5f73dfbfaf5bdcf",
+            "application_id": APP_ID,
+            "session_id": SESSION_ID,
             "data": {
                 "component_type": 2,
-                "custom_id": "MJ::JOB::upsample::{}::{}".format(
-                    index, self.message_hash(message)
-                ),
+                "custom_id": f"MJ::JOB::upsample::{index}::{self.message_hash(message)}",
             },
         }
-        url = "https://discord.com/api/v9/interactions"
+        url = f"{API_BASE_URL}/interactions"
         response = self._session.post(
             url=url,
             json=payload,
@@ -136,34 +142,8 @@ class MidjourneyBot:
             print("Error in up_scale:", response.status_code, response.text)
         return response.status_code
 
-    def max_up_scale(self, message):
-        payload = {
-            "type": 3,
-            "guild_id": self._server_id,
-            "channel_id": self._channel_id,
-            "message_flags": 0,
-            "message_id": self.message_id(message),
-            "application_id": "936929561302675456",
-            "session_id": "1f3dbdf09efdf93d81a3a6420882c92c",
-            "data": {
-                "component_type": 2,
-                "custom_id": "MJ::JOB::upsample_max::1::{}::SOLO".format(
-                    self.message_hash(message)
-                ),
-            },
-        }
-        url = "https://discord.com/api/v9/interactions"
-        response = self._session.post(
-            url=url,
-            json=payload,
-            headers=self._header,
-            proxies=self._proxies,
-            timeout=120,
-        )
-        return response.status_code
-
     def messages(self, limit=1):
-        url = f"https://discord.com/api/v9/channels/{self._channel_id}/messages?limit={limit}"
+        url = f"{API_BASE_URL}/channels/{self._channel_id}/messages?limit={limit}"
         response = self._session.get(
             url=url,
             headers=self._header,
@@ -179,20 +159,7 @@ class MidjourneyBot:
         headers=None,
         additional_data=None,
     ):
-        """
-        response = requests.get(
-            url=image_url,
-            headers=self._header,
-            proxies=self._proxies,
-            timeout=30,
-        )
-        
-        if image_filename:
-            with open(image_filename, "wb") as fp:
-                fp.write(response.content)
-        """
         if external_url:
-            # files = [("image", (image_filename or "image.png", response.content, "image/png"))]
             payload = {
                 "image_url": image_url,
             }
@@ -201,3 +168,6 @@ class MidjourneyBot:
                 payload.update(additional_data)
 
             self._session.post(external_url, headers=headers, data=payload)
+
+        # Add this line to return the payload
+        return payload
