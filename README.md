@@ -47,7 +47,10 @@ To use the MidjourneyWrapper API, you need to have access to your Discord creden
 To interface with it, you can send the following example payload to the Flask endpoint "/prompt", using the HTTP POST method:
 
 > Remember to not include /imagine in the prompt!
+
 > "refId" is optional, but it is recommended to include it to automate uploading the image to Strapi.
+
+> The payload you send via POST should be raw JSON.
 ```
 {
     "prompt": "Some prompt, --v 5",
