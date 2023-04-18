@@ -27,7 +27,7 @@ def receive_prompt():
         midjourney_bot.ask(prompt)
         time.sleep(2)
 
-        old_headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
+        # old_headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
         headers = {}
         additional_data = {
             "refId": f"{refId}",  # Replace this with the actual refId
@@ -46,6 +46,7 @@ def receive_prompt():
 
         # Trigger the up_scale command
         original_message = midjourney_bot.messages(1)[0]
+        print(original_message)
         up_scale_status = midjourney_bot.up_scale(1, original_message)
         print("Up_scale status:", up_scale_status)
 

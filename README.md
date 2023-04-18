@@ -1,20 +1,45 @@
-# MidjourneyWrapper
+# MidjourneyWrapper Discord Bot
 
-A REST API to access midjourney discord
+🤖 This is a fork of a Python app that interacts with Discord to prompt the Midjourney Bot commands. The original repository can be found [here](https://github.com/Debupt/MidjourneyWrapper).
 
-## Configuration
+## Installation
 
-update config.json before use this wrapper
+To run the application, you need to fill out the secrets and run the following command:
 
-- `user_token`: user account's token, please refer: [How to get your Discord token](https://www.androidauthority.com/get-discord-token-3149920/)
-- `server_id/channel_id`: please refer: [Where can I find my User/Server/Message ID](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-)
-- `proxy`: if you can access discord freely, no need this field
+```
+python main.py
+```
 
-## Example Usage
+## Features
 
-`python3 example.py`  
-prompt based picture would be saved in `test.png` file after a few second
+This fork includes the following additional features:
 
-## TODO
+- Automatic image upscaling and sending the link to a webhook
+- Removed the functionality of saving the image to a file
+- Added Flask to send prompts to its endpoint using HTTP POST requests
 
-- [ ] add async interface
+## Usage
+
+To use the MidjourneyWrapper API, you need to have access to your Discord credentials, e.g. User Token, Server ID, and Channel ID.
+
+To interface with it, you can send the following example payload to the Flask endpoint "/prompt", using the HTTP POST method:
+
+```
+{
+    "prompt": "Some prompt, --v 5",
+    "refId": "12"
+}
+```
+### Remember to not include /imagine in the prompt!
+
+## Build
+
+This project was built with the following tools in mind:
+
+- [n8n](https://n8n.io/)
+- [gpt-3-turbo](https://platform.openai.com/docs/models/gpt-3-5)
+- [Strapi v4](https://github.com/strapi/strapi)
+
+## License
+
+This project is licensed under the [MIT License](https://github.com/Debupt/MidjourneyWrapper/blob/main/LICENSE).
