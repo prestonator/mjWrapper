@@ -6,10 +6,7 @@ from midjourney_bot import MidjourneyBot
 from waitress import serve
 
 load_dotenv(dotenv_path=".env")
-STRAPI_API_TOKEN = os.environ.get("STRAPI_API_TOKEN")
-STRAPI_API_UPLOAD_URL = os.environ.get("STRAPI_API_UPLOAD_URL")
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
-
 
 midjourney_bot = MidjourneyBot()
 
