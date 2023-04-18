@@ -25,9 +25,7 @@ def receive_prompt():
     if prompt:
         time.sleep(2)
         midjourney_bot.ask(prompt)
-        time.sleep(2)
 
-        # old_headers = {"Authorization": f"Bearer {STRAPI_API_TOKEN}"}
         headers = {}
         additional_data = {
             "refId": f"{refId}",  # Replace this with the actual refId
@@ -42,7 +40,7 @@ def receive_prompt():
             if midjourney_bot.validate_image_url(message):
                 break
             print(midjourney_bot.content(message))
-            time.sleep(3)
+            time.sleep(5)
 
         # Trigger the up_scale command
         original_message = midjourney_bot.messages(1)[0]
@@ -59,7 +57,7 @@ def receive_prompt():
             ):
                 break
             print(midjourney_bot.content(upscaled_message))
-            time.sleep(3)
+            time.sleep(5)
 
         upscaled_message = midjourney_bot.messages(1)[0]
         image_url = midjourney_bot.get_image_url(upscaled_message)
