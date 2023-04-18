@@ -2,9 +2,17 @@
 
 🤖 This is a fork of a Python app that interacts with Discord to prompt the Midjourney Bot commands. The original repository can be found [here](https://github.com/Debupt/MidjourneyWrapper).
 
+## Prerequisites
+Rename the file `.env.template` to `.env` and fill in the following fields:
+
+- `USER_TOKEN` - Your Discord User Token, please refer to [How can I obtain my User Token?](https://www.androidauthority.com/get-discord-token-3149920/) to learn how to get it.
+- `SERVER_ID` - The ID of the server you want to send the prompts to, refer to [How do I find my server ID?](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) to learn how to get it.
+- `CHANNEL_ID` - The ID of the channel you want to send the prompts to, see the above link to learn how to get it.
+
+
 ## Installation
 
-To run the application, you need to fill out the secrets (refer to the .env.template file) and run the following command:
+To run the application, run the following commands:
 
 > Unix/macOS
 ```
@@ -38,7 +46,8 @@ To use the MidjourneyWrapper API, you need to have access to your Discord creden
 
 To interface with it, you can send the following example payload to the Flask endpoint "/prompt", using the HTTP POST method:
 
-### Remember to not include /imagine in the prompt!
+> Remember to not include /imagine in the prompt!
+> "refId" is optional, but it is recommended to include it to automate uploading the image to Strapi.
 ```
 {
     "prompt": "Some prompt, --v 5",
