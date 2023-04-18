@@ -184,7 +184,7 @@ class MidjourneyBot:
                 "image_url": image_url,
             }
 
-        if additional_data:
-            payload.update(additional_data)
+            if additional_data:
+                payload.update(additional_data)
 
             requests.post(external_url, headers=headers, data=payload)
