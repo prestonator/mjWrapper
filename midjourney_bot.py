@@ -1,5 +1,5 @@
-import base64
 import json
+import time
 import requests
 from dotenv import load_dotenv
 import os
@@ -32,6 +32,7 @@ class MidjourneyBot:
         return self.get_image_url(message).split("_")[-1].split(".")[0]
 
     def get_image_url(self, message):
+        time.sleep(2)
         return message["attachments"][0]["url"]
 
     def validate_image_url(self, message):
