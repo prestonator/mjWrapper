@@ -4,9 +4,23 @@
 
 ## Installation
 
-To run the application, you need to fill out the secrets and run the following command:
+To run the application, you need to fill out the secrets (refer to the .env.template file) and run the following command:
 
+> Unix/macOS
 ```
+python -m venv env
+source env/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+python main.py
+```
+
+> Windows
+```
+py -m venv env
+.\env\Scripts\activate
+pip install --upgrade pip
+pip install -r requirements.txt
 python main.py
 ```
 
@@ -24,13 +38,13 @@ To use the MidjourneyWrapper API, you need to have access to your Discord creden
 
 To interface with it, you can send the following example payload to the Flask endpoint "/prompt", using the HTTP POST method:
 
+### Remember to not include /imagine in the prompt!
 ```
 {
     "prompt": "Some prompt, --v 5",
     "refId": "12"
 }
 ```
-### Remember to not include /imagine in the prompt!
 
 ## Build
 
