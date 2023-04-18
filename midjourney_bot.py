@@ -161,7 +161,6 @@ class MidjourneyBot:
     def save_image(
         self,
         image_url,
-        image_filename=None,
         external_url=None,
         headers=None,
         additional_data=None,

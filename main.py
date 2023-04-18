@@ -42,7 +42,7 @@ def receive_prompt():
             if midjourney_bot.validate_image_url(message):
                 break
             print(midjourney_bot.content(message))
-            time.sleep(5)
+            time.sleep(3)
 
         # Trigger the up_scale command
         original_message = midjourney_bot.messages(1)[0]
@@ -58,12 +58,12 @@ def receive_prompt():
             ):
                 break
             print(midjourney_bot.content(upscaled_message))
-            time.sleep(5)
+            time.sleep(3)
 
         upscaled_message = midjourney_bot.messages(1)[0]
         image_url = midjourney_bot.get_image_url(upscaled_message)
 
-        midjourney_bot.save_image(image_url, "test.png", external_url, headers, additional_data)
+        midjourney_bot.save_image(image_url, external_url, headers, additional_data)
 
         return jsonify(
             {"status": "success", "message": "Prompt received and processed."}
