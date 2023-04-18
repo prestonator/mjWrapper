@@ -1,4 +1,4 @@
-# MidjourneyWrapper Discord Bot
+# MidjourneyWrapper Discord API
 
 🤖 This is a fork of a Python app that interacts with Discord to prompt the Midjourney Bot commands. The original repository can be found [here](https://github.com/Debupt/MidjourneyWrapper).
 
